@@ -46,4 +46,35 @@ class DbAdapterMySQL extends \PDO implements DbInterface
         $this->exec($sql);
     }
 
+    public function delete($table, $where)
+    {
+        $sql = "DELETE FROM $table WHERE $where";
+
+        $this->exe($sql);
+    }
+
+    public function select($table, $cols = '*', $where = null)
+    {
+        $cols = is_array($cols) ? implode(',', $cols) : $cols;
+
+        $sql = "SELECT $cols FROM $table " . (empty($where) ? '' : "WHERE $where");
+        $stmt = $this->query($sql);
+
+        return new Collection(empty($stmt)) ? array() : $stmt->fetchAll();
+    }
+
+    public function getFields($table)
+    {
+        $sql = "DESCRIBE $table;";
+        $stmt = $this->query($sql);
+        $results = $stmt->fetchAll();
+
+        $metadata = array();
+
+        foreach ($results as $result):
+            $metadata[$result['Field']] = null;
+        endforeach;
+        return $metadata;
+    }
+
 }

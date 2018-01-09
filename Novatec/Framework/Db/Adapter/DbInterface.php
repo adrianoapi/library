@@ -13,5 +13,5 @@ interface DbInterface
 
     public function delete($table, $where);
 
-    public function select($table, $cols = '*', $hwere = null);
+    public function select($table, $cols = '*', $where = null);
 }
